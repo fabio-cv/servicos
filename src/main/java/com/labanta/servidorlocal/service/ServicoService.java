@@ -26,7 +26,7 @@ public class ServicoService {
         return repository;
     }
 
-    public Servico servicoSave(Servico servico){
+    public Servico saveServico(Servico servico){
        return repository.save(servico);
     }
 
@@ -60,5 +60,9 @@ public class ServicoService {
             }
         }
         return repository.saveAll(listaAtualizada);
+    }
+
+    public List<Servico> buscarServicoPeloTitulo(String titulo){
+        return repository.findByTituloContainingIgnoreCase(titulo);
     }
 }

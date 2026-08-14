@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("api/v1")
 public class ServicoController {
     private ServicoService servicoService;
 
@@ -23,15 +24,20 @@ public class ServicoController {
 
     @PostMapping("/servicos")
     public Servico criarServico(@RequestBody Servico servico){
-        return servicoService.servicoSave(servico);
+        System.out.println("titulo = " + servico.getTitulo());
+        System.out.println("descricao = " + servico.getDescricao());
+        System.out.println("preco = " + servico.getPreco());
+        System.out.println("estado = " + servico.isEstado());
+        System.out.println("precoComDesconto = " + servico.getPrecoComDesconto());
+        return servicoService.saveServico(servico);
     }
 
-    @GetMapping("/servicos/{id}")
+    @GetMapping("/{id}")
     public Servico obterServicoPorID(@PathVariable Long id){
         return servicoService.buscarServicoPorID(id);
     }
 
-    @PostMapping("/servicos/aplicar-desconto")
+    @PostMapping("/aplicar-desconto")
     public List<ServicoResponseDTO> aplicarDesconto(@RequestBody double desconto){
         List<Servico> lista = servicoService.aplicarDescontoEmAtivos(desconto);
         List<ServicoResponseDTO> listaComPrecoFinal = new ArrayList<>();
@@ -42,6 +48,11 @@ public class ServicoController {
         }
         return listaComPrecoFinal;
 
+    }
+
+    @GetMapping("/pesquisa")
+    public void buscarServico(@RequestParam String termo){
+        servicoService.buscarServicoPeloTitulo(termo);
     }
 
 }

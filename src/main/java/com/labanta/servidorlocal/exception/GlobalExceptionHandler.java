@@ -49,4 +49,26 @@ public class GlobalExceptionHandler extends RuntimeException {
 
        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
    }
+
+   @ExceptionHandler(UtilizadorExistenteException.class)
+    public ResponseEntity<Map<String, String>> handleUtilizadorExistenteException(UtilizadorExistenteException ex){
+       log.warn("Erro: {}", ex.getMessage());
+
+       Map<String, String> res = new HashMap<>();
+       res.put("erro", "Utilizador com este username já existe!");
+       res.put("mensagem", ex.getMessage());
+
+       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+   }
+
+    @ExceptionHandler(UtilizadorNaoEncontrado.class)
+    public ResponseEntity<Map<String, String>> handleUtilizadorNaoEncontrado(UtilizadorNaoEncontrado ex){
+        log.warn("Erro: {}", ex.getMessage());
+
+        Map<String, String> res = new HashMap<>();
+        res.put("erro", "Utilizador não encontrado!");
+        res.put("mensagem", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+    }
 }

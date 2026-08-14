@@ -16,4 +16,8 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
     List<Servico> findByPrecoLessThan(Double valorMaximo);
 
     Optional<Servico> findById(@NonNull Long id);
+
+
+    // Encontra todos os serviços cujo título contenha esta palavra, ignorando maiúsculas e minúsculas
+    List<Servico> findByTituloContainingIgnoreCase(String termo);
 }
