@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("/api/v1")
 public class ServicoController {
     private ServicoService servicoService;
 
@@ -24,11 +24,6 @@ public class ServicoController {
 
     @PostMapping("/servicos")
     public Servico criarServico(@RequestBody Servico servico){
-        System.out.println("titulo = " + servico.getTitulo());
-        System.out.println("descricao = " + servico.getDescricao());
-        System.out.println("preco = " + servico.getPreco());
-        System.out.println("estado = " + servico.isEstado());
-        System.out.println("precoComDesconto = " + servico.getPrecoComDesconto());
         return servicoService.saveServico(servico);
     }
 
@@ -51,8 +46,8 @@ public class ServicoController {
     }
 
     @GetMapping("/pesquisa")
-    public void buscarServico(@RequestParam String termo){
-        servicoService.buscarServicoPeloTitulo(termo);
+    public List<Servico> buscarServico(@RequestParam String termo){
+        return servicoService.buscarServicoPeloTitulo(termo);
     }
 
 }
