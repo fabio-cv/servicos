@@ -17,12 +17,15 @@ import java.util.Optional;
 public class AuthService {
 
     private final UtilizadorRepository repository;
+    private final JwtService jwtService;
+    private final EmailService emailService;
 
-
-
-    public AuthService(UtilizadorRepository repository) {
+    public AuthService(UtilizadorRepository repository, JwtService jwtService, EmailService emailService) {
         this.repository = repository;
+        this.jwtService = jwtService;
+        this.emailService = emailService;
     }
+
 
     public void saveUtilizador(Utilizador utilizador){
         repository.save(utilizador);
@@ -47,6 +50,7 @@ public class AuthService {
         if (encontrado){
             throw new UtilizadorExistenteException("Utilizador com username " + username + " já existe! Não pode ter utilizadores com mesmo username!");
         }
+        emailService.enviarEmailBoasVindas(utilizador.getEmail(), utilizador.getUsername());
         saveUtilizador(utilizador);
         return utilizador;
     }
