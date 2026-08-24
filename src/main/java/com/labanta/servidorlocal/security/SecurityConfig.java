@@ -28,8 +28,9 @@ public class SecurityConfig {
                         ex.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/servicos").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/servicos/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/servicos", "/api/v1/servicos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/servicos/*/orcamento", "/api/v1/servicos/{id}/orcamento").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
 
