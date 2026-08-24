@@ -28,17 +28,15 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization"); // cabeçalho
 
-        log.info("=== JWT Filter === Path: {} | Authorization header presente: {}", request.getRequestURI(), authHeader != null);
+//        log.info("=== JWT Filter === Path: {} | Authorization header presente: {}", request.getRequestURI(), authHeader != null);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-
-        //E
         // Extrair o token (ignorar os primeiros 7 caracteres: "Bearer ")
         String token = authHeader.substring(7);
         if (token.isEmpty() || token.equals("undefined")) {
@@ -49,7 +47,7 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
         try{
             //EXTRAIR O USERNAME DO TOKEN (ISTO TAMBEM VALIDA A ASSINATURA E A )
             String username = jwtService.extrairUsername(token);
-            log.info("=== JWT Filter === Username extraído do token: {}", username);
+//            log.info("=== JWT Filter === Username extraído do token: {}", username);
             //SE O USERNAME E VALIDO E AINDA NAO HA AUTENTICACAO NO CONTEXTO
             if (username !=null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 //DIZER AO SPRING QUE ESTE UTILIZADOR ESTA AUTENTICADO

@@ -27,4 +27,24 @@ public class EmailService {
 
         mailSender.send(mensagem);
     }
+
+
+    public void enviarOrcamentoPorEmail(String emailDestino, String nomeServico, double precoConvertido, String moeda){
+
+        SimpleMailMessage mensagem = new SimpleMailMessage();
+        mensagem.setFrom(emailDestino);
+        mensagem.setTo(emailDestino);
+        mensagem.setSubject("Orçamento do serviço no Marketplace!");
+        String corpo = String.format(
+                "Olá!\n\nAqui tens o orçamento solicitado para o serviço: \n\n" +
+                        "Servico: %s\n" +
+                        "Preço Final: %.2f %s\n\n" +
+                        "Este valor foi calculado com a taxa de câmbio em tempo real.\n" +
+                        "Obrigado por usares o nosso Marktplace!",
+                nomeServico, precoConvertido, moeda
+        );
+
+        mensagem.setText(corpo);
+        mailSender.send(mensagem);
+    }
 }
