@@ -1,17 +1,12 @@
 package com.labanta.servidorlocal.service;
 
-import com.labanta.servidorlocal.dto.LoginRequestDTO;
-import com.labanta.servidorlocal.dto.RegistoRequestDTO;
 import com.labanta.servidorlocal.exception.CredenciasInvalidasException;
 import com.labanta.servidorlocal.exception.UtilizadorExistenteException;
-import com.labanta.servidorlocal.exception.UtilizadorNaoEncontrado;
+import com.labanta.servidorlocal.exception.UtilizadorNaoEncontradoException;
 import com.labanta.servidorlocal.model.Utilizador;
 import com.labanta.servidorlocal.repository.UtilizadorRepository;
 import com.labanta.servidorlocal.security.JwtService;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -33,7 +28,7 @@ public class AuthService {
 
     public String login(String username, String password){
         Utilizador utilizador = repository.findByUsername(username).orElseThrow(
-                () ->  new UtilizadorNaoEncontrado("O Utilizador com o username " + username + " não encontrado")
+                () ->  new UtilizadorNaoEncontradoException("O Utilizador com o username " + username + " não encontrado")
         );
 
         if (password.equals(utilizador.getPassword())){

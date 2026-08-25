@@ -1,5 +1,7 @@
-package com.labanta.servidorlocal.exception;
+package com.labanta.servidorlocal.exception.global;
 
+import com.labanta.servidorlocal.dto.GeoLocationResponseDTO;
+import com.labanta.servidorlocal.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -61,8 +63,8 @@ public class GlobalExceptionHandler extends RuntimeException {
        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
    }
 
-    @ExceptionHandler(UtilizadorNaoEncontrado.class)
-    public ResponseEntity<Map<String, String>> handleUtilizadorNaoEncontrado(UtilizadorNaoEncontrado ex){
+    @ExceptionHandler(UtilizadorNaoEncontradoException.class)
+    public ResponseEntity<Map<String, String>> handleUtilizadorNaoEncontradoException(UtilizadorNaoEncontradoException ex){
         log.warn("Erro: {}", ex.getMessage());
 
         Map<String, String> res = new HashMap<>();
@@ -70,5 +72,16 @@ public class GlobalExceptionHandler extends RuntimeException {
         res.put("mensagem", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+    }
+
+    @ExceptionHandler(GeoLocationException.class)
+    public ResponseEntity<Map<String, String>> handleIPInvalidoException(GeoLocationException ex){
+       log.warn("Erro: {}", ex.getMessage());
+
+        Map<String, String> res = new HashMap<>();
+        res.put("erro", "Erro ao inserir o IP / IP não encontrado / API não funciona");
+        res.put("mensagem", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
 }

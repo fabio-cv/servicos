@@ -47,4 +47,22 @@ public class EmailService {
         mensagem.setText(corpo);
         mailSender.send(mensagem);
     }
+
+//  enviar um email de alerta sempre que alguém tentar fazer uma compra ou login num dispositivo novo
+    public void enviarAlertaSeguranca(String emailDestino, String cidade, String pais){
+        SimpleMailMessage mensagem = new SimpleMailMessage();
+
+        mensagem.setFrom(emailDestino);
+        mensagem.setTo(emailDestino);
+        mensagem.setSubject("Aviso de Segurança do Marketplace!");
+        String corpo = String.format(
+                "Olá!\n\nAviso de Segurança: \n\n" +
+                        "Detetámos uma nova atividade na tua conta do Marketplace a partir de %s, %s.\n" +
+                        "Se não foste tu, altera tua password imediatamente!",
+                        cidade, pais
+        );
+
+        mensagem.setText(corpo);
+        mailSender.send(mensagem);
+    }
 }
