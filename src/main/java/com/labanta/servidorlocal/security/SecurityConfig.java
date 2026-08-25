@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/v1/servicos", "/api/v1/servicos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/servicos/*/orcamento", "/api/v1/servicos/{id}/orcamento").permitAll()
                         .requestMatchers("/error").permitAll()
-
+                        .requestMatchers( "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 )
 

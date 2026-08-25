@@ -6,6 +6,8 @@ import com.labanta.servidorlocal.model.Servico;
 import com.labanta.servidorlocal.service.EmailService;
 import com.labanta.servidorlocal.service.ExchangeService;
 import com.labanta.servidorlocal.service.ServicoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Provider;
@@ -26,21 +28,44 @@ public class ServicoController {
         this.emailService = emailService;
     }
 
+    @Operation(
+            summary = "Listar todos os serviços",
+            description = "Rota para listar todos os serviços existentes na plataforma"
+    )
     @GetMapping
     public List<Servico> listarServicos(){
         return  servicoService.servicoFindAll();
     }
 
+
+
+
+    @Operation(
+            summary = "Criar um novo serviço",
+            description = "Rota para criar um novo serviço"
+    )
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping
     public Servico criarServico(@RequestBody Servico servico){
         return servicoService.saveServico(servico);
     }
 
+
+
+    @Operation(
+            summary = "Obter um serviço pelo ID",
+            description = "Rota para buscar/obter um determinado serviço pelo ID"
+    )
     @GetMapping("/{id}")
     public Servico obterServicoPorID(@PathVariable Long id){
         return servicoService.buscarServicoPorID(id);
     }
 
+    @Operation(
+            summary = "Aplicar desconto nos serviços",
+            description = "Aplica uma percentagem de desconto a todos os serviços ativos"
+    )
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping("/aplicar-desconto")
     public List<ServicoResponseDTO> aplicarDesconto(@RequestBody double desconto){
         List<Servico> lista = servicoService.aplicarDescontoEmAtivos(desconto);
@@ -54,6 +79,10 @@ public class ServicoController {
 
     }
 
+    @Operation(
+            summary = "Pesquisar serviços",
+            description = "Pesquisa serviços por termo/título"
+    )
     @GetMapping("/pesquisa")
     public List<Servico> buscarServico(@RequestParam String termo){
         return servicoService.buscarServicoPeloTitulo(termo);
@@ -61,19 +90,21 @@ public class ServicoController {
 
 
 
+    @Operation(
+            summary = "Pedir orçamento de serviço",
+            description = "Calcula a conversão de moeda do preço do serviço e envia o orçamento por email"
+    )
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping("/{id}/orcamento")
     public String pedirOrcamento(
             @PathVariable Long id,
             @RequestParam String emailDestino,
             @RequestParam(defaultValue = "CVE") String moeda
     ){
-        // 1. Ir à Base de Dados buscar o Serviço
+
         Servico servico = servicoService.buscarServicoPorID(id);
 
-        // 2. Ir à internet converter o preço
         Double precoConvertido = exchangeService.converterPreco(servico.getPreco(), moeda);
-
-        // 3. Enviar o resultado para o Gmail do cliente
         emailService.enviarOrcamentoPorEmail(emailDestino, servico.getTitulo(), precoConvertido, moeda);
 
         return  "Orcamento calculado e enviado com sucesso para " + emailDestino + "!";

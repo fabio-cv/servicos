@@ -10,6 +10,7 @@ import com.labanta.servidorlocal.security.JwtService;
 import com.labanta.servidorlocal.service.AuthService;
 import com.labanta.servidorlocal.service.EmailService;
 import com.labanta.servidorlocal.service.GeoService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
@@ -28,16 +29,28 @@ public class AuthController {
         this.emailService = emailService;
     }
 
+    @Operation(
+            summary = "Autenticar utilizador",
+            description = "Realiza a autenticação do utilizador e retorna o token JWT"
+    )
     @PostMapping("/login")
     public String login(@RequestBody LoginRequestDTO login){
         return authService.login(login.getUsername(), login.getPassword());
     }
 
+    @Operation(
+            summary = "Registar novo utilizador",
+            description = "Regista um novo utilizador no sistema"
+    )
     @PostMapping("/registar")
     public Utilizador registar(@RequestBody RegistoRequestDTO registo){
         return authService.registarUtilizador(registo.getUsername(), registo.getEmail(), registo.getPassword());
     }
 
+    @Operation(
+            summary = "Enviar alerta de login",
+            description = "Localiza o IP do utilizador e envia um alerta de segurança por email"
+    )
     @PostMapping("/alerta-login")
     public String alerta(@RequestParam String email, @RequestParam String ip){
         GeoLocationResponseDTO res = geoService.localizarIp(ip);
