@@ -18,7 +18,7 @@ public class ExchangeService {
         // Fazer a chamada HTTP (GET) à internet e guardar no nosso DTO
         ExchangeRateResponseDTO resposta = restTemplate.getForObject(url, ExchangeRateResponseDTO.class);
 
-        // Ir ao mapa procurar a taxa da moeeda pedida (ex: CVE)
+        // Ir ao mapa procurar a taxa da moeda pedida (ex: CVE)
         if(resposta != null && resposta.getRates().containsKey(moedaDestino)){
 
             double taxa = resposta.getRates().get(moedaDestino);
