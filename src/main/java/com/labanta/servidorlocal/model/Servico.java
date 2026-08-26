@@ -16,18 +16,19 @@ public class Servico {
     private double preco;
     private boolean estado;
     private double precoComDesconto;
+    private String imagemCapa;
 
 
     public Servico() {
     }
 
-    public Servico(String titulo, String descricao, double preco, boolean estado, double precoComDesconto) {
+    public Servico(String titulo, String descricao, double preco, boolean estado, double precoComDesconto, String imagemCapa) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.preco = preco;
         this.estado = estado;
         this.precoComDesconto = precoComDesconto;
-
+        this.imagemCapa = imagemCapa;
     }
 
     public Long getId() {
@@ -74,11 +75,11 @@ public class Servico {
         this.precoComDesconto = precoComDesconto;
     }
 
-    public void aplicarDesconto(double percentagem){
-        double desconto = (this.preco * percentagem)/100;
-        this.preco = this.preco - desconto;
+    public String getImagemCapa(){
+        return imagemCapa;
+    }
 
-        System.out.println("Desconto de: " + desconto + "% " + "no serviço: " + this.titulo);
-        System.out.println("Novo preço = " + this.preco);
+    public void setImagemCapa(String imagemCapa){
+        this.imagemCapa = imagemCapa;
     }
 }
