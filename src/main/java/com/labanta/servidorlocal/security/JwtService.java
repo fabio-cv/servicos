@@ -11,7 +11,7 @@ import java.util.Date;
 public class JwtService {
 
     private final String secretString = "7Fpn0kLeUHVTuVMcKDzrB6RfrUjGXyIu4laayt9eFra";
-    private final SecretKey key = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
+    private final SecretKey key = Keys.hmacShaKeyFor("${JWT_SECRET}".getBytes());
 
     public String gerarTokens(String username){
         return Jwts.builder()
