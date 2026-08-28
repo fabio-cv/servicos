@@ -17,10 +17,10 @@ public class FileStorageService {
 
     public FileStorageService() {
         try {
-            // cria a pasta se não existir
-            Files.createDirectory(Path.of(dirUploads));
+            // cria a pasta e subpastas se não existirem
+            Files.createDirectories(Path.of(dirUploads));
         } catch (Exception e) {
-            throw new RuntimeException("Ocorreu um erro ao criar pasta de uploads: " + e.getMessage());
+            throw new RuntimeException("Ocorreu um erro ao criar pasta de uploads: " + e.getMessage(), e);
         }
     }
 

@@ -1,14 +1,23 @@
 package com.labanta.servidorlocal.controller;
 
-import com.labanta.servidorlocal.dto.ExchangeRateResponseDTO;
+
 import com.labanta.servidorlocal.dto.ServicoResponseDTO;
 import com.labanta.servidorlocal.model.Servico;
 import com.labanta.servidorlocal.service.EmailService;
 import com.labanta.servidorlocal.service.ExchangeService;
+import com.labanta.servidorlocal.service.FileStorageService;
 import com.labanta.servidorlocal.service.ServicoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Provider;
 import java.util.ArrayList;
@@ -20,12 +29,14 @@ public class ServicoController {
     private final ServicoService servicoService;
     private final ExchangeService exchangeService;
     private final EmailService emailService;
+    private final FileStorageService fileStorageService;
 
 
-    public ServicoController(ServicoService servicoService, ExchangeService exchangeService, EmailService emailService) {
+    public ServicoController(ServicoService servicoService, ExchangeService exchangeService, EmailService emailService, FileStorageService fileStorageService) {
         this.servicoService = servicoService;
         this.exchangeService = exchangeService;
         this.emailService = emailService;
+        this.fileStorageService = fileStorageService;
     }
 
     @Operation(
@@ -33,8 +44,12 @@ public class ServicoController {
             description = "Rota para listar todos os serviços existentes na plataforma"
     )
     @GetMapping
-    public List<Servico> listarServicos(){
-        return  servicoService.servicoFindAll();
+    public ResponseEntity<Page<Servico>> listarServicos(
+            @ParameterObject
+            @PageableDefault(page = 0, size = 10, sort = "id",
+                    direction = Sort.Direction.DESC) Pageable pageable){
+        Page<Servico> pagina = servicoService.getRepository().findAll(pageable);
+        return ResponseEntity.ok(pagina);
     }
 
 
@@ -109,5 +124,27 @@ public class ServicoController {
 
         return  "Orcamento calculado e enviado com sucesso para " + emailDestino + "!";
     }
+
+
+    @Operation(
+            summary = "Upload de imagem de capa do serviço",
+            description = "Carrega uma imagem multipart/form-data e associa à capa do serviço"
+    )
+    @SecurityRequirement(name = "BearerAuth")
+    @PostMapping(value = "/{id}/upload-capa", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadFile(
+            @RequestParam("file") MultipartFile file,
+            @PathVariable Long id
+            ){
+        Servico servico =  servicoService.buscarServicoPorID(id);
+        String fileuploaded = fileStorageService.storeImage(file);
+
+        servico.setImagemCapa(fileuploaded);
+        servicoService.saveServico(servico);
+
+        return ResponseEntity.ok("Imagem carregada com sucesso: " + fileuploaded);
+    }
+
+
 
 }
