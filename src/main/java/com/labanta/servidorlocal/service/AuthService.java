@@ -32,8 +32,7 @@ public class AuthService {
         );
 
         if (password.equals(utilizador.getPassword())){
-            JwtService token = new JwtService();
-            return token.gerarTokens(utilizador.getUsername());
+            return this.jwtService.gerarTokens(utilizador.getUsername());
         }
         throw  new CredenciasInvalidasException("Username ou password inválidos");
     }

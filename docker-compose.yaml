@@ -1,2 +1,10 @@
 services:
-  
+  servidor-java-final:
+    build: .
+    container_name: servidor-java-final
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./uploads/imagens:/app/uploads/imagens
