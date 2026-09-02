@@ -61,7 +61,8 @@ public class ServicoController {
     )
     @SecurityRequirement(name = "BearerAuth")
     @PostMapping
-    public Servico criarServico(@RequestBody Servico servico){
+    public Servico criarServico(@RequestBody ServicoRequestDTO servico){
+        Servico servico = new Servico(servico.getTitulo(), servico.getDescricao(), servico.getPreco());
         return servicoService.saveServico(servico);
     }
 
