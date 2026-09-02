@@ -1,6 +1,7 @@
 package com.labanta.servidorlocal.controller;
 
 
+import com.labanta.servidorlocal.dto.ServicoRequestDTO;
 import com.labanta.servidorlocal.dto.ServicoResponseDTO;
 import com.labanta.servidorlocal.model.Servico;
 import com.labanta.servidorlocal.service.EmailService;
@@ -62,8 +63,8 @@ public class ServicoController {
     @SecurityRequirement(name = "BearerAuth")
     @PostMapping
     public Servico criarServico(@RequestBody ServicoRequestDTO servico){
-        Servico servico = new Servico(servico.getTitulo(), servico.getDescricao(), servico.getPreco());
-        return servicoService.saveServico(servico);
+        Servico novoServico = new Servico(servico.getTitulo(), servico.getDescricao(), servico.getPreco());
+        return servicoService.saveServico(novoServico);
     }
 
 

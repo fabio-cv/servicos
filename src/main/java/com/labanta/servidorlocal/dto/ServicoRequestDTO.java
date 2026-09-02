@@ -5,6 +5,7 @@ public class ServicoRequestDTO {
     private String descricao;
     private double preco;
 
+
     public ServicoRequestDTO(String titulo, String descricao, double preco) {
         this.titulo = titulo;
         this.descricao = descricao;
